@@ -140,7 +140,6 @@ void mouseWheel(MouseEvent event) {
   // possitive vOffset moves the drawing down the screen
   vOffset -= (int) event.getCount();
   vOffset = max(min(vOffset, 0), -windowCanvasHeight+windowHeight);
-  
   cp5.get("scroll").setValue(map(vOffset, -windowCanvasHeight+windowHeight, 0, 0, 100));
 }
 
@@ -148,13 +147,18 @@ void mutate(){
   // get the fttest of the previous generation, assume rating is finished when mutate is pressed
   Individual fittest = getFittest();
   
-  //TODO: reset values in rating UI.
- 
   // create a new generation 
   generations = (Generation[]) append (generations, new Generation(this, numIndividuals, mutationPropability, crossoverProbability, printCanvas, individualCanvases));
   
   // evolve latest generation based on previous generation
   generations[generations.length-1].evolve(generations[generations.length-2]);
+  
+  //reset values in rating UI.
+  for (int i = 0; i<numIndividuals; i++){
+    cp5.get("rating " + i)
+      .setValue(0)
+      ;
+  }
   
 }
 

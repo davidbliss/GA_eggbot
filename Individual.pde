@@ -49,6 +49,7 @@ class Individual implements Comparable {
   
   void rate(float r){
     rating = r;
+    println(r);
   }
   
   Individual clone(){
