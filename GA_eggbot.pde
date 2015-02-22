@@ -7,9 +7,7 @@ int numIndividuals = 200; // number must be even
 float mutationPropability = .01; // likely target should be 1% of the time
 float crossoverProbability = .75; // likely target should be 75% of the time
 
-// TODO: once rating is implemented, target parameters and acceptable fitness are no longer relevant.
 float[] targetParameters = {.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5};
-float acceptableFitness = .99;
 
 int windowWidth = 1001;
 int windowHeight = 801;
@@ -33,8 +31,6 @@ void setup() {
   
   generations = new Generation [1];
   
-  
-  
   cp5.addButton("mutate")
      .setPosition(10,windowHeight-30)
      ;
@@ -46,7 +42,6 @@ void setup() {
   cp5.addButton("generations")
      .setPosition(170,windowHeight-30)
      ;
-  
   
   cp5.addSlider("scroll")
      .setPosition(985,5)
@@ -62,20 +57,13 @@ void setup() {
     cp5.addButton("print " + i)
       .setPosition(820,240*i+20)
     ;
+    
      
-    cp5.addSlider("rating " + i)
-     .setBroadcast(false)
-     .setPosition(830,240*i+50)
-     .setRange(0,1)
-     .setNumberOfTickMarks(6)
-     .setBroadcast(true)
-     ;
-     
-     EggbotCanvas canvas = new EggbotCanvas(this, false);
-     canvas.penUp(true);
-     canvas.movePen(0, 0);
-     canvas.penUp(false);
-     individualCanvases = (EggbotCanvas[]) append(individualCanvases, canvas);
+    EggbotCanvas canvas = new EggbotCanvas(this, false);
+    canvas.penUp(true);
+    canvas.movePen(0, 0);
+    canvas.penUp(false);
+    individualCanvases = (EggbotCanvas[]) append(individualCanvases, canvas);
   }
   
   // create and evaluate initial generation
@@ -131,14 +119,11 @@ void manualDraw() {
       translate(0, 240);
     }
     
+    // clear the uneeded UI
     for (int i = 0; i<numIndividuals; i++){
        cp5.get("print " + i)
        .setPosition(-2000, -2000)
        ;
-      
-      cp5.get("rating " + i)
-        .setPosition(-2000, -2000)
-        ;
     }
     translate(-20, -240*generations.length-20);
   }
@@ -179,9 +164,7 @@ void controlEvent(ControlEvent theEvent){
   // Handle events from the print buttons
   String name = theEvent.controller().name();
   
-  if (name.indexOf("rating")>-1) {
-    generations[generations.length-1].rate(Integer.valueOf(name.substring(7, name.length())),theEvent.controller().value()); 
-  } else if (name.indexOf("print")>-1) { 
+  if (name.indexOf("print")>-1) { 
     generations[generations.length-1].print(Integer.valueOf(name.substring(6, name.length())));
   } else if (name.indexOf("scroll")>-1) { 
     // scroll value between 0 and 1 translat between 0 and -windowCanvasHeight+windowHeight

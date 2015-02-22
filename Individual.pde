@@ -3,7 +3,6 @@
 class Individual implements Comparable {
   float[] parameters = {};
   float fitness;
-  float rating;
   int id;
   int[] parents = {};
   
@@ -15,10 +14,6 @@ class Individual implements Comparable {
     for (int i = 0; i < parameters.length; i++) {
       parameters[i] = random(1);
     }
-    
-    // TODO: once drawing and rating is in place, each individual will define it's own parameters and how to initialize each one
-    // Parameters can be anything, most will likely be float between 0-1 or int between 0 and n (for classification type parameters)
-    
   }
   
   void mutate(float probability){
@@ -31,7 +26,6 @@ class Individual implements Comparable {
   }
   
   void calculateFitness(float[] targetParameters) {
-    // TODO: fitness will be defined based on the rating not based on the parameters.
     // full fitness is 1
     
     fitness = 0;
@@ -61,10 +55,6 @@ class Individual implements Comparable {
     for (int i = 0; i < numParameters; i++) {
       canvas.movePen(i*(2000/(numParameters-1)), int(parameters[i]*700));
     }
-  }
-  
-  void rate(float r){
-    rating = r;
   }
   
   Individual clone(){

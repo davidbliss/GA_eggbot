@@ -102,10 +102,6 @@ class Generation {
     individuals[individual].draw(printCanvas);
   }
   
-  void rate(int individual, float rating){
-    individuals[individual].rate(rating);
-  }
-  
   void draw(int vOffset){
     translate(20, 20);
     for (int i=0; i< individuals.length; i++){
@@ -116,10 +112,6 @@ class Generation {
        .setPosition(830,240*i+175+vOffset)
        ;
       
-      cp5.get("rating " + i)
-        .setPosition(830,240*i+20+vOffset)
-        ;
-        
       translate(0, 240);
     }
     translate(-20, -240*individuals.length-20);
