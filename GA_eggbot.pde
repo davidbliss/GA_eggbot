@@ -3,13 +3,9 @@ ControlP5 cp5;
 
 Generation [] generations; // an array of generations
 
-int numIndividuals = 200; // number must be even
+int numIndividuals = 20; // number must be even
 float mutationPropability = .01; // likely target should be 1% of the time
 float crossoverProbability = .75; // likely target should be 75% of the time
-
-// TODO: once rating is implemented, target parameters and acceptable fitness are no longer relevant.
-float[] targetParameters = {.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5,.5};
-float acceptableFitness = .99;
 
 int windowWidth = 1001;
 int windowHeight = 801;
@@ -32,8 +28,6 @@ void setup() {
   size(windowWidth, windowHeight);
   
   generations = new Generation [1];
-  
-  
   
   cp5.addButton("mutate")
      .setPosition(10,windowHeight-30)
@@ -79,7 +73,7 @@ void setup() {
   }
   
   // create and evaluate initial generation
-  generations[0] = new Generation(this, numIndividuals, mutationPropability, crossoverProbability, targetParameters, printCanvas, individualCanvases);
+  generations[0] = new Generation(this, numIndividuals, mutationPropability, crossoverProbability, printCanvas, individualCanvases);
   generations[0].evaluate();
   getFittest();
   
@@ -115,7 +109,7 @@ void manualDraw() {
     for (int i = generations.length-2; i>=0; i--){
       
       if (fittest.parents.length == 2){
-        if (generations[i].individuals[fittest.parents[0]].fitness < generations[i].individuals[fittest.parents[1]].fitness){
+        if (generations[i].individuals[fittest.parents[0]].rating < generations[i].individuals[fittest.parents[1]].rating){
           fittest=generations[i].individuals[fittest.parents[1]];
         } else {
           fittest=generations[i].individuals[fittest.parents[0]];
@@ -154,14 +148,15 @@ void mouseWheel(MouseEvent event) {
 }
 
 void mutate(){
+  Individual fittest = getFittest();
   println("making a new generation");
   // create a new generation 
-  generations = (Generation[]) append (generations, new Generation(this, numIndividuals, mutationPropability, crossoverProbability, targetParameters, printCanvas, individualCanvases));
+  generations = (Generation[]) append (generations, new Generation(this, numIndividuals, mutationPropability, crossoverProbability, printCanvas, individualCanvases));
   
   // evolve latest generation based on previous generation
   generations[generations.length-1].evolve(generations[generations.length-2]);
   
-  Individual fittest = getFittest();
+  
 
 }
 
@@ -196,7 +191,7 @@ void controlEvent(ControlEvent theEvent){
 Individual getFittest(){
   // get the fittest
   Individual fittest = generations[generations.length-1].getFittest();
-  println("fittest individual in generation "+ generations.length +" is " + fittest.fitness);
+  println("fittest individual in generation "+ generations.length +" is " + fittest.rating);
   return fittest;
 }
 

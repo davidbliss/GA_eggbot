@@ -7,34 +7,26 @@ class Generation {
   Individual [] individuals = {};// an array of generations
   float mutationProbability;
   float crossoverProbability;
-  float[] targetParameters;
   EggbotCanvas printCanvas;
   EggbotCanvas [] individualCanvases = {};
   PApplet parent;
   
-  Generation(PApplet p, int numIndividuals, float mp, float cp, float[] tp, EggbotCanvas pc, EggbotCanvas [] ic) {
+  Generation(PApplet p, int numIndividuals, float mp, float cp, EggbotCanvas pc, EggbotCanvas [] ic) {
     parent = p;
     mutationProbability = mp;
     crossoverProbability = cp;
-    targetParameters = tp;
     printCanvas = pc;
     individualCanvases = ic;
     
     // Build array of individuals based on parameters
     
     for (int i=0; i< numIndividuals; i++){
-      
-     
-      individuals = (Individual []) append(individuals, new Individual(targetParameters.length, i) );
+      individuals = (Individual []) append(individuals, new Individual(i) );
     }
   }
   
   void evaluate() {
-    for (int i = 0; i < individuals.length; i++) {
-      individuals[i].calculateFitness(targetParameters);
-    }
-    
-    // sort by fitness
+    // sort by rating
     Arrays.sort(individuals);
   }
   

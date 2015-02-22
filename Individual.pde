@@ -1,24 +1,21 @@
-// Individual holds the parameters, defines it's fitness and can draw itself 
+// Individual holds the parameters, rating, parents and can draw itself 
+// This is a simple template that draws a based on random numbers
 
 class Individual implements Comparable {
   float[] parameters = {};
-  float fitness;
   float rating;
   int id;
   int[] parents = {};
   
-  Individual(int numParameters, int pid) {
+  Individual(int pid) {
     // build array of random parameters
     id = pid;
     
-    parameters = new float[numParameters];
+    // Each individual should define its own parameters and decide what to do with them
+    parameters = new float[30];
     for (int i = 0; i < parameters.length; i++) {
       parameters[i] = random(1);
-    }
-    
-    // TODO: once drawing and rating is in place, each individual will define it's own parameters and how to initialize each one
-    // Parameters can be anything, most will likely be float between 0-1 or int between 0 and n (for classification type parameters)
-    
+    }  
   }
   
   void mutate(float probability){
@@ -28,19 +25,6 @@ class Individual implements Comparable {
         parameters[i] = min(max(parameters[i]+(randomGaussian()/4),0),1);
       }
     }
-  }
-  
-  void calculateFitness(float[] targetParameters) {
-    // TODO: fitness will be defined based on the rating not based on the parameters.
-    // full fitness is 1
-    
-    fitness = 0;
-    
-    for (int i = 0; i < parameters.length; i++) {
-      fitness += abs(parameters[i] - targetParameters[i]);
-    }
-    fitness /= parameters.length;
-    fitness = 1 - fitness;
   }
   
   void draw(EggbotCanvas canvas){
@@ -68,7 +52,7 @@ class Individual implements Comparable {
   }
   
   Individual clone(){
-    Individual copy = new Individual(parameters.length, -1);
+    Individual copy = new Individual(-1);
     for (int i=0; i< parameters.length; i++){
       copy.parameters[i] = parameters[i];
     }
@@ -78,17 +62,18 @@ class Individual implements Comparable {
   // used by Arrays to do sort
   int compareTo(Object obj) {
     Individual other = (Individual) obj;
-    if (fitness > other.fitness) {
+    if (rating > other.rating) {
       return 1;
     }
-    else if (fitness < other.fitness) {
+    else if (rating < other.rating) {
       return -1;
     }
     return 0;
   }
   
   String output(){
-    String output = "fitness:"+fitness+" parameters:";
+    // TODO: include other things like parents and ID
+    String output = "rating:"+rating+" parameters:";
     for (int i = 0; i < parameters.length; i++) {
       output += parameters[i];
       if (i < parameters.length-1) output += ", ";
