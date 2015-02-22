@@ -41,6 +41,10 @@ void setup() {
      .setPosition(170,windowHeight-30)
      ;
   
+  cp5.addButton("output")
+     .setPosition(250,windowHeight-30)
+     ;
+  
   cp5.addSlider("scroll")
      .setPosition(985,5)
      .setBroadcast(false)

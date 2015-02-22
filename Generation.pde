@@ -120,7 +120,7 @@ class Generation {
   String output(){
     String output = "";
     for (int i = 0; i < individuals.length; i++) {
-      output += "Individual "+ i +": ";
+      output += "\nIndividual "+ i +": ";
       output += individuals[i].output();
     }
     return output;
