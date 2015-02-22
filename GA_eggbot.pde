@@ -3,7 +3,7 @@ ControlP5 cp5;
 
 Generation [] generations; // an array of generations
 
-int numIndividuals = 20; // number must be even
+int numIndividuals = 10; // number must be even
 float mutationPropability = .01; // likely target should be 1% of the time
 float crossoverProbability = .75; // likely target should be 75% of the time
 
@@ -41,7 +41,6 @@ void setup() {
      .setPosition(170,windowHeight-30)
      ;
   
-  
   cp5.addSlider("scroll")
      .setPosition(985,5)
      .setBroadcast(false)
@@ -72,11 +71,9 @@ void setup() {
      individualCanvases = (EggbotCanvas[]) append(individualCanvases, canvas);
   }
   
-  // create and evaluate initial generation
+  // create initial generation
   generations[0] = new Generation(this, numIndividuals, mutationPropability, crossoverProbability, printCanvas, individualCanvases);
-  generations[0].evaluate();
-  getFittest();
-  
+ 
   manualDraw();
 }
 
@@ -148,16 +145,17 @@ void mouseWheel(MouseEvent event) {
 }
 
 void mutate(){
+  // get the fttest of the previous generation, assume rating is finished when mutate is pressed
   Individual fittest = getFittest();
-  println("making a new generation");
+  
+  //TODO: reset values in rating UI.
+ 
   // create a new generation 
   generations = (Generation[]) append (generations, new Generation(this, numIndividuals, mutationPropability, crossoverProbability, printCanvas, individualCanvases));
   
   // evolve latest generation based on previous generation
   generations[generations.length-1].evolve(generations[generations.length-2]);
   
-  
-
 }
 
 void generations(){
