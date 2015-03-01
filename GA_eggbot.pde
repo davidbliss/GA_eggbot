@@ -3,8 +3,8 @@ ControlP5 cp5;
 
 Generation [] generations; // an array of generations
 
-int numIndividuals = 10; // number must be even
-float mutationPropability = .01; // likely target should be 1% of the time
+int numIndividuals = 20; // number must be even
+float mutationPropability = .04; // likely target should be 1% of the time
 float crossoverProbability = .75; // likely target should be 75% of the time
 
 int windowWidth = 1001;
@@ -23,7 +23,7 @@ void setup() {
   // set up one eggbot canvas to use for the actual plotting, pass it to each generation so it can be passed onto the individuals
   printCanvas = new EggbotCanvas(this, true);
   printCanvas.penUp(true);
-  printCanvas.movePen(0, 0);
+  //printCanvas.movePen(0, 0);
   
   size(windowWidth, windowHeight);
   

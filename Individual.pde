@@ -15,11 +15,12 @@ class Individual implements Comparable {
     // parameter 1: wavelength of wave
     // parameter 2: magnatideModulationMagnatude
     // parameter 3: magnatideModulationWavelength
-    // parameter 4: wavelengthModulationMagnatude
-    // parameter 5: wavelengthModulationWavelength
+    // parameter 4: magnatideModulationMagnatude2
+    // parameter 5: magnatideModulationWavelength2
     // parameter 6: numberWaves
+    // parameter 7: numberOfModulations
     
-    parameters = new float[7];
+    parameters = new float[8];
     for (int i = 0; i < parameters.length; i++) {
       parameters[i] = random(1);
     }  
@@ -51,29 +52,23 @@ class Individual implements Comparable {
     int numParameters = parameters.length;
     int wavelength = (int)(parameters[1] * 1000);
     
-    int magnatideModulationMagnatude = (int)(parameters[2] * 1000);
     int magnatideModulationWavelength = (int)(parameters[3] * 1000);
+    int magnatideModulationWavelength2 = (int)(parameters[5] * 1000);
     
-//    float c = 2000.0;
-//    while ((int)(c/wavelength)!=(float)(c/wavelength)){
-//      c+=2000;
-//      // TODO: consider parameterizing the 20 in the next if 
-//      if (c>2000*20){
-//        break;
-//      }
-//    }
-//    // TODO: consider if number of waves should just be parameterized
-//    int numberWave = (int)(c/wavelength);
     int numberWave = (int)(200*parameters[6]);
-    for (int i = 0; i < numberWave; i++) {
-      float curveSegments = 40.0;
-      for (int j = 0; j <= curveSegments; j++) {
-        int x = (i * wavelength) + (int)(j*(wavelength/curveSegments));
+    float curveSegments = 40.0;
+    
+    for (int x = 0; x < (numberWave*wavelength); x+=(wavelength/curveSegments)) {
+      //for (int j = 0; j <= curveSegments; j++) {
+        //int x = (i * wavelength) + (int)(j*(wavelength/curveSegments));
         
-        int magnatideModulationY = (int)(parameters[2] * 350 * sin( ((x % (float)magnatideModulationMagnatude) / magnatideModulationMagnatude) * TWO_PI));
-        int y = 350 - (int)(parameters[0]*350*sin((j/curveSegments)*TWO_PI)) + magnatideModulationY;
+        int magnatideModulationY = (int)(parameters[2] * 250 * sin( ((x % (float)magnatideModulationWavelength) / magnatideModulationWavelength) * TWO_PI));
+        if (parameters[7] <.5){
+          magnatideModulationY += (int)(parameters[4] * 150 * sin( ((x % (float)magnatideModulationWavelength2) / magnatideModulationWavelength2) * TWO_PI));
+        }
+        int y = 350 - (int)(parameters[0]*250*sin(((x%(float)wavelength)/wavelength)*TWO_PI)) + magnatideModulationY;
         canvas.movePen(x, y);
-      }
+      //}
     }
   }
   

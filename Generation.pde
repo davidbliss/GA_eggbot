@@ -63,10 +63,15 @@ class Generation {
         // 40% of the time pick from the top quartile
         pick = int(random(thirdQuartile, individuals.length));
       }
-      individuals[i] = parent.individuals[pick].clone();
-      individuals[i].id = i;
-      // record the parent id
-      individuals[i].parents = append(individuals[i].parents, pick);
+      // ignore the 0 rated items
+      if (parent.individuals[pick].rating !=0 ){
+        individuals[i] = parent.individuals[pick].clone();
+        individuals[i].id = i;
+        // record the parent id
+        individuals[i].parents = append(individuals[i].parents, pick);
+      } else {
+        i--;
+      }
     }
     
     // loop through two at a time and based on probability, do the crossover
