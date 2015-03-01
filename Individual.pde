@@ -8,11 +8,18 @@ class Individual implements Comparable {
   int[] parents = {};
   
   Individual(int pid) {
-    // build array of random parameters
     id = pid;
     
     // Each individual should define its own parameters and decide what to do with them
-    parameters = new float[30];
+    // parameter 0: magnatude of wave
+    // parameter 1: wavelength of wave
+    // parameter 2: magnatideModulationMagnatude
+    // parameter 3: magnatideModulationWavelength
+    // parameter 4: wavelengthModulationMagnatude
+    // parameter 5: wavelengthModulationWavelength
+    // parameter 6: numberWaves
+    
+    parameters = new float[7];
     for (int i = 0; i < parameters.length; i++) {
       parameters[i] = random(1);
     }  
@@ -42,8 +49,31 @@ class Individual implements Comparable {
     canvas.setPen(1);
     
     int numParameters = parameters.length;
-    for (int i = 0; i < numParameters; i++) {
-      canvas.movePen(i*(2000/(numParameters-1)), int(parameters[i]*700));
+    int wavelength = (int)(parameters[1] * 1000);
+    
+    int magnatideModulationMagnatude = (int)(parameters[2] * 1000);
+    int magnatideModulationWavelength = (int)(parameters[3] * 1000);
+    
+//    float c = 2000.0;
+//    while ((int)(c/wavelength)!=(float)(c/wavelength)){
+//      c+=2000;
+//      // TODO: consider parameterizing the 20 in the next if 
+//      if (c>2000*20){
+//        break;
+//      }
+//    }
+//    // TODO: consider if number of waves should just be parameterized
+//    int numberWave = (int)(c/wavelength);
+    int numberWave = (int)(200*parameters[6]);
+    for (int i = 0; i < numberWave; i++) {
+      float curveSegments = 40.0;
+      for (int j = 0; j <= curveSegments; j++) {
+        int x = (i * wavelength) + (int)(j*(wavelength/curveSegments));
+        
+        int magnatideModulationY = (int)(parameters[2] * 350 * sin( ((x % (float)magnatideModulationMagnatude) / magnatideModulationMagnatude) * TWO_PI));
+        int y = 350 - (int)(parameters[0]*350*sin((j/curveSegments)*TWO_PI)) + magnatideModulationY;
+        canvas.movePen(x, y);
+      }
     }
   }
   
@@ -72,7 +102,6 @@ class Individual implements Comparable {
   }
   
   String output(){
-    // TODO: include other things like parents and ID
     String output = "ID:"+id+"\nrating:"+rating+"\nparents:";
     for (int i = 0; i < parents.length; i++) {
       output += parents[i];

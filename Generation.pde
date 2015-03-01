@@ -49,6 +49,7 @@ class Generation {
       float spin = random(1);
       int pick;
       //println (individuals[i]+":"+spin);
+      
       if (spin <= .1){
         // 10% of time pick lower 25% of the
         pick = int(random(0,firstQuartile));

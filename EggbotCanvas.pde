@@ -115,7 +115,7 @@ class EggbotCanvas {
       //println("drawing x:"+x+" y:"+y);
       
       int sX=penX/4; int sY=penY/4; int eX=x/4; int eY=y/4;
-      if (sX>stageWidth && eX>stageWidth){
+      while (sX>stageWidth && eX>stageWidth){
         sX-=stageWidth;
         eX-=stageWidth;
       }
