@@ -73,7 +73,12 @@ class Individual implements Comparable {
   
   String output(){
     // TODO: include other things like parents and ID
-    String output = "rating:"+rating+" parameters:";
+    String output = "ID:"+id+"\nrating:"+rating+"\nparents:";
+    for (int i = 0; i < parents.length; i++) {
+      output += parents[i];
+      if (i < parents.length-1) output += ", ";
+    }
+    output += "\nparameters:";
     for (int i = 0; i < parameters.length; i++) {
       output += parameters[i];
       if (i < parameters.length-1) output += ", ";
