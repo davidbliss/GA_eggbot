@@ -29,7 +29,7 @@ void setup() {
   
   generations = new Generation [1];
   
-  cp5.addButton("mutate")
+  cp5.addButton("evolve")
      .setPosition(10,windowHeight-30)
      ;
      
@@ -147,8 +147,8 @@ void mouseWheel(MouseEvent event) {
   cp5.get("scroll").setValue(map(vOffset, -windowCanvasHeight+windowHeight, 0, 0, 100));
 }
 
-void mutate(){
-  // get the fttest of the previous generation, assume rating is finished when mutate is pressed
+void evolve(){
+  // get the fttest of the previous generation, assume rating is finished when evolve is pressed
   Individual fittest = getFittest();
   
   // create a new generation 
