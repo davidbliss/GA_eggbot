@@ -37,12 +37,6 @@ class Individual implements Comparable {
   
   void draw(EggbotCanvas canvas){
     // draw itself to the specified canvas
-    canvas.setPen(3);
-    canvas.penUp(true);
-    canvas.movePen(0, 350);
-    canvas.penUp(false);
-    canvas.movePen(2000, 350);
-    
     canvas.penUp(true);
     canvas.movePen(0, 350);
     canvas.penUp(false);
@@ -70,6 +64,9 @@ class Individual implements Comparable {
         canvas.movePen(x, y);
       //}
     }
+    
+    canvas.penUp(true);
+    canvas.movePen(0, 350);
   }
   
   void rate(float r){
