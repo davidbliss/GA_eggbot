@@ -108,7 +108,6 @@ class Generation {
     translate(20, 20);
     for (int i=0; i< individuals.length; i++){
       int topI = 20+(240*i);
-      int bottomI = topI+240;
       
       if (vOffset+topI > -240 && vOffset+topI < height) {
         // only draw if it is onscreen

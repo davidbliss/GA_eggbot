@@ -142,7 +142,7 @@ void manualDraw() {
 
 void mouseWheel(MouseEvent event) {
   // possitive vOffset moves the drawing down the screen
-  vOffset -= (int) event.getCount();
+  vOffset -= (int) event.getCount() * 10;
   vOffset = max(min(vOffset, 0), -windowCanvasHeight+windowHeight);
   cp5.get("scroll").setValue(map(vOffset, -windowCanvasHeight+windowHeight, 0, 0, 100));
 }
