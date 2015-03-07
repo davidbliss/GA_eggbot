@@ -11,6 +11,7 @@ int windowWidth = 1001;
 int windowHeight = 801;
 int windowCanvasHeight = numIndividuals * 240 + 20; // raw eggbot canvas is 175
 int vOffset = 0;
+int lineageIndividual;
 
 int displayMode = 0; // 0 = generations; 1 = lineage
 
@@ -32,17 +33,13 @@ void setup() {
   cp5.addButton("evolve")
      .setPosition(10,windowHeight-30)
      ;
-     
-  cp5.addButton("lineage")
+  
+  cp5.addButton("generations")
      .setPosition(90,windowHeight-30)
      ;
   
-  cp5.addButton("generations")
-     .setPosition(170,windowHeight-30)
-     ;
-  
   cp5.addButton("output")
-     .setPosition(250,windowHeight-30)
+     .setPosition(170,windowHeight-30)
      ;
   
   cp5.addSlider("scroll")
@@ -56,6 +53,10 @@ void setup() {
      ;
     
   for (int i=0; i<numIndividuals; i++){
+    cp5.addButton("lineage " + i)
+      .setPosition(820,240*i+20)
+    ;
+    
     cp5.addButton("print " + i)
       .setPosition(820,240*i+20)
     ;
@@ -95,39 +96,45 @@ void manualDraw() {
   } else if (displayMode==1){
     // draw lineage of fittest individual
     // TODO: fix bug arrising from the fact that currently if number of generations is greater than number of individuals, there will not be enough canvases for the lineage
-    
+    // TODO: add ability to print each of these.
     int canvasIndex = 0;
     translate(20, 20);
     
     // draw the fittest individual in the latest generation
-    Individual fittest = generations[generations.length-1].getFittest();
+    Individual individual = generations[generations.length-1].individuals[lineageIndividual];
+    println(individual.output());
     individualCanvases[canvasIndex].drawBackground();
-    fittest.draw(individualCanvases[canvasIndex]);
+    individual.draw(individualCanvases[canvasIndex]);
     canvasIndex++;
     translate(0, 240);
     
     // loop through generations from 2nd to latest down to first, drawing the graph of the fittest parent of fittest
     for (int i = generations.length-2; i>=0; i--){
       
-      if (fittest.parents.length == 2){
-        if (generations[i].individuals[fittest.parents[0]].rating < generations[i].individuals[fittest.parents[1]].rating){
-          fittest=generations[i].individuals[fittest.parents[1]];
+      if (individual.parents.length == 2){
+        if (generations[i].individuals[individual.parents[0]].rating < generations[i].individuals[individual.parents[1]].rating){
+          individual=generations[i].individuals[individual.parents[1]];
         } else {
-          fittest=generations[i].individuals[fittest.parents[0]];
+          individual=generations[i].individuals[individual.parents[0]];
         }
       } else {
-        fittest=generations[i].individuals[fittest.parents[0]];
+        individual=generations[i].individuals[individual.parents[0]];
       }
       
+      individual.output();
       individualCanvases[canvasIndex].drawBackground();
-      fittest.draw(individualCanvases[canvasIndex]);
+      individual.draw(individualCanvases[canvasIndex]);
       
       canvasIndex++;
       translate(0, 240);
     }
     
     for (int i = 0; i<numIndividuals; i++){
-       cp5.get("print " + i)
+      cp5.get("lineage " + i)
+       .setPosition(-2000, -2000)
+       ;
+       
+      cp5.get("print " + i)
        .setPosition(-2000, -2000)
        ;
       
@@ -163,7 +170,6 @@ void evolve(){
       .setValue(0)
       ;
   }
-  
 }
 
 void generations(){
@@ -171,7 +177,8 @@ void generations(){
   vOffset = 0;
 }
 
-void lineage(){
+void lineage(int i){
+  lineageIndividual = i;
   displayMode = 1;
   vOffset = 0;
 }
@@ -184,6 +191,8 @@ void controlEvent(ControlEvent theEvent){
     generations[generations.length-1].rate(Integer.valueOf(name.substring(7, name.length())),theEvent.controller().value()); 
   } else if (name.indexOf("print")>-1) { 
     generations[generations.length-1].print(Integer.valueOf(name.substring(6, name.length())));
+  } else if (name.indexOf("lineage")>-1) { 
+    lineage(Integer.valueOf(name.substring(8, name.length())));
   } else if (name.indexOf("scroll")>-1) { 
     // scroll value between 0 and 1 translat between 0 and -windowCanvasHeight+windowHeight
     float m = map(theEvent.controller().value(), 100, 0, 0, -windowCanvasHeight+windowHeight);

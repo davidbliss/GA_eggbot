@@ -33,7 +33,6 @@ class Generation {
   Individual getFittest(){
     // in case it has not already been called, go ahead and force evaluate
     evaluate();
-    
     return individuals[individuals.length-1];
   }
   
@@ -115,6 +114,10 @@ class Generation {
         individuals[i].draw(individualCanvases[i]);
       }
       
+      cp5.get("lineage " + i)
+       .setPosition(830,240*i+145+vOffset)
+       ;
+       
       cp5.get("print " + i)
        .setPosition(830,240*i+175+vOffset)
        ;
