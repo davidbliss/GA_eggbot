@@ -107,8 +107,14 @@ class Generation {
   void draw(int vOffset){
     translate(20, 20);
     for (int i=0; i< individuals.length; i++){
-      individualCanvases[i].drawBackground();
-      individuals[i].draw(individualCanvases[i]);
+      int topI = 20+(240*i);
+      int bottomI = topI+240;
+      
+      if (vOffset+topI > -240 && vOffset+topI < height) {
+        // only draw if it is onscreen
+        individualCanvases[i].drawBackground();
+        individuals[i].draw(individualCanvases[i]);
+      }
       
       cp5.get("print " + i)
        .setPosition(830,240*i+175+vOffset)
