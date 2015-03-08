@@ -11,12 +11,13 @@ int windowWidth = 1001;
 int windowHeight = 801;
 int windowCanvasHeight = numIndividuals * 240 + 20; // raw eggbot canvas is 175
 int vOffset = 0;
-int lineageIndividual;
 
 int displayMode = 0; // 0 = generations; 1 = lineage
 
 EggbotCanvas printCanvas;
 EggbotCanvas [] individualCanvases = {};
+
+Individual [] lineage = {}; // an array of individuals 
 
 void setup() {
   cp5 = new ControlP5(this);
@@ -24,22 +25,21 @@ void setup() {
   // set up one eggbot canvas to use for the actual plotting, pass it to each generation so it can be passed onto the individuals
   printCanvas = new EggbotCanvas(this, true);
   printCanvas.penUp(true);
-  //printCanvas.movePen(0, 0);
   
   size(windowWidth, windowHeight);
   
   generations = new Generation [1];
   
+  cp5.addButton("back")
+     .setPosition(-2000,-2000)
+     ;
+     
   cp5.addButton("evolve")
      .setPosition(10,windowHeight-30)
      ;
   
-  cp5.addButton("generations")
-     .setPosition(90,windowHeight-30)
-     ;
-  
   cp5.addButton("output")
-     .setPosition(170,windowHeight-30)
+     .setPosition(90,windowHeight-30)
      ;
   
   cp5.addSlider("scroll")
@@ -78,7 +78,9 @@ void setup() {
   
   // create initial generation
   generations[0] = new Generation(this, numIndividuals, mutationPropability, crossoverProbability, printCanvas, individualCanvases);
- 
+  
+  generations();
+  
   manualDraw();
 }
 
@@ -96,34 +98,15 @@ void manualDraw() {
   } else if (displayMode==1){
     // draw lineage of fittest individual
     // TODO: fix bug arrising from the fact that currently if number of generations is greater than number of individuals, there will not be enough canvases for the lineage
-    // TODO: add ability to print each of these.
+  
     int canvasIndex = 0;
     translate(20, 20);
     
-    // draw the fittest individual in the latest generation
-    Individual individual = generations[generations.length-1].individuals[lineageIndividual];
-    println(individual.output());
-    individualCanvases[canvasIndex].drawBackground();
-    individual.draw(individualCanvases[canvasIndex]);
-    canvasIndex++;
-    translate(0, 240);
-    
-    // loop through generations from 2nd to latest down to first, drawing the graph of the fittest parent of fittest
-    for (int i = generations.length-2; i>=0; i--){
+    // draw individuals in the lineage array
+    for (int i = 0; i<lineage.length; i++){
       
-      if (individual.parents.length == 2){
-        if (generations[i].individuals[individual.parents[0]].rating < generations[i].individuals[individual.parents[1]].rating){
-          individual=generations[i].individuals[individual.parents[1]];
-        } else {
-          individual=generations[i].individuals[individual.parents[0]];
-        }
-      } else {
-        individual=generations[i].individuals[individual.parents[0]];
-      }
-      
-      individual.output();
       individualCanvases[canvasIndex].drawBackground();
-      individual.draw(individualCanvases[canvasIndex]);
+      lineage[i].draw(individualCanvases[canvasIndex]);
       
       canvasIndex++;
       translate(0, 240);
@@ -133,11 +116,16 @@ void manualDraw() {
       cp5.get("lineage " + i)
        .setPosition(-2000, -2000)
        ;
-       
-      cp5.get("print " + i)
-       .setPosition(-2000, -2000)
-       ;
       
+      if (i<lineage.length){
+        cp5.get("print " + i)
+         .setPosition(830,240*i+175+vOffset)
+         ;
+      } else {
+        cp5.get("print " + i)
+          .setPosition(-2000, -2000)
+          ;
+      }
       cp5.get("rating " + i)
         .setPosition(-2000, -2000)
         ;
@@ -175,12 +163,62 @@ void evolve(){
 void generations(){
   displayMode = 0;
   vOffset = 0;
+  // set up generation ui
+  cp5.get("back")
+    .setPosition(-2000,-2000)
+    ;
+    
+  cp5.get("evolve")
+    .setPosition(10,height-30)
+    ;
+      
+  cp5.get("output")
+    .setPosition(90,height-30)
+    ;    
 }
 
-void lineage(int i){
-  lineageIndividual = i;
+void back(){
+  generations();
+}
+
+void lineage(int individualIndex){
   displayMode = 1;
   vOffset = 0;
+  
+  // build lineage array
+  lineage = (Individual[]) subset(lineage, 0, 0);
+  Individual individual = generations[generations.length-1].individuals[individualIndex];
+  lineage = (Individual []) append(lineage, individual );
+ 
+  // loop through generations from 2nd to latest down to first, drawing the graph of the fittest parent of fittest
+  for (int i = generations.length-2; i>=0; i--){
+    
+    if (individual.parents.length == 2){
+      if (generations[i].individuals[individual.parents[0]].rating < generations[i].individuals[individual.parents[1]].rating){
+        individual = generations[i].individuals[individual.parents[1]];
+        lineage = (Individual []) append(lineage, individual);
+      } else {
+        individual = generations[i].individuals[individual.parents[0]];
+        lineage = (Individual []) append(lineage, individual);
+      }
+    } else {
+      individual = generations[i].individuals[individual.parents[0]];
+      lineage = (Individual []) append(lineage, individual);
+    }
+  }
+  
+  // set up lineage ui
+  cp5.get("back")
+    .setPosition(10,height-30)
+    ;
+    
+  cp5.get("evolve")
+    .setPosition(-2000,-2000)
+    ;
+      
+  cp5.get("output")
+    .setPosition(-2000,-2000)
+    ;
 }
 
 void controlEvent(ControlEvent theEvent){
@@ -190,7 +228,13 @@ void controlEvent(ControlEvent theEvent){
   if (name.indexOf("rating")>-1) {
     generations[generations.length-1].rate(Integer.valueOf(name.substring(7, name.length())),theEvent.controller().value()); 
   } else if (name.indexOf("print")>-1) { 
-    generations[generations.length-1].print(Integer.valueOf(name.substring(6, name.length())));
+    if (displayMode ==0){
+      // generation mode
+      generations[generations.length-1].print(Integer.valueOf(name.substring(6, name.length())));
+    } else if (displayMode ==1){
+      // lineage mode
+      lineage[Integer.valueOf(name.substring(6, name.length()))].draw(printCanvas);
+    }
   } else if (name.indexOf("lineage")>-1) { 
     lineage(Integer.valueOf(name.substring(8, name.length())));
   } else if (name.indexOf("scroll")>-1) { 

@@ -4,7 +4,7 @@ import controlP5.*;
 
 class Generation {
   
-  Individual [] individuals = {};// an array of generations
+  Individual [] individuals = {};// an array of individuals in this generation
   float mutationProbability;
   float crossoverProbability;
   EggbotCanvas printCanvas;
