@@ -3,7 +3,7 @@ ControlP5 cp5;
 
 Generation [] generations; // an array of generations
 
-int numIndividuals = 20; // number must be even
+int numIndividuals = 50; // number must be even
 float mutationPropability = .04; // likely target should be 1% of the time
 float crossoverProbability = .75; // likely target should be 75% of the time
 

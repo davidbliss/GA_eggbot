@@ -52,17 +52,16 @@ class Individual implements Comparable {
     int numberWave = (int)(200*parameters[6]);
     float curveSegments = 40.0;
     
-    for (int x = 0; x < (numberWave*wavelength); x+=(wavelength/curveSegments)) {
-      //for (int j = 0; j <= curveSegments; j++) {
-        //int x = (i * wavelength) + (int)(j*(wavelength/curveSegments));
-        
+    int step = (int) (wavelength/curveSegments);
+    if (step<1) step=1;
+    
+    for (int x = 0; x < (numberWave*wavelength); x+= step) {
         int magnatideModulationY = (int)(parameters[2] * 250 * sin( ((x % (float)magnatideModulationWavelength) / magnatideModulationWavelength) * TWO_PI));
         if (parameters[7] <.5){
           magnatideModulationY += (int)(parameters[4] * 150 * sin( ((x % (float)magnatideModulationWavelength2) / magnatideModulationWavelength2) * TWO_PI));
         }
         int y = 350 - (int)(parameters[0]*250*sin(((x%(float)wavelength)/wavelength)*TWO_PI)) + magnatideModulationY;
         canvas.movePen(x, y);
-      //}
     }
     
     canvas.penUp(true);

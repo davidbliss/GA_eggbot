@@ -230,8 +230,6 @@ class EggbotCanvas {
   
   void drawFilledCircle(int cx, int cy, int r, int num_segments){ 
     // println("------drawFilledCircle------");
-    // to prevent calibration problems when moving backward, roll always roll forward
-    //while (cx+r < penX/1.6) cx+= 2000;
     
     if(r!=0){
       for(int i = r; i >= 0; i=i-4) { 
