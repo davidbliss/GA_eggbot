@@ -1,4 +1,4 @@
-// version 1.1
+// version 1.2
 
 import processing.serial.*;
 // this version of the canvas is meant to be embeded in a larger window to accomidate additional tools.

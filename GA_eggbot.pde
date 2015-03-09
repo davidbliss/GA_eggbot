@@ -79,15 +79,19 @@ void setup() {
   // create initial generation
   generations[0] = new Generation(this, numIndividuals, mutationPropability, crossoverProbability, printCanvas, individualCanvases);
   
+  // set UI to show generations
   generations();
   
+  // draw things
   manualDraw();
 }
 
 void draw() {
+  // don't update anything automatically
 }
 
 void manualDraw() {
+  // called after an interaction with UI
   translate(0, vOffset);
   background(200);
   
@@ -143,9 +147,6 @@ void mouseWheel(MouseEvent event) {
 }
 
 void evolve(){
-  // get the fttest of the previous generation, assume rating is finished when evolve is pressed
-  Individual fittest = getFittest();
-  
   // create a new generation 
   generations = (Generation[]) append (generations, new Generation(this, numIndividuals, mutationPropability, crossoverProbability, printCanvas, individualCanvases));
   
@@ -175,10 +176,6 @@ void generations(){
   cp5.get("output")
     .setPosition(90,height-30)
     ;    
-}
-
-void back(){
-  generations();
 }
 
 void lineage(int individualIndex){
@@ -221,8 +218,14 @@ void lineage(int individualIndex){
     ;
 }
 
+
+void back(){
+  // return to generations from lineage
+  generations();
+}
+
 void controlEvent(ControlEvent theEvent){
-  // Handle events from the print buttons
+  // Handle events from UI
   String name = theEvent.controller().name();
   
   if (name.indexOf("rating")>-1) {
@@ -244,14 +247,6 @@ void controlEvent(ControlEvent theEvent){
   }
   
   manualDraw();
-  
-}
-
-Individual getFittest(){
-  // get the fittest
-  Individual fittest = generations[generations.length-1].getFittest();
-  println("fittest individual in generation "+ generations.length +" is " + fittest.rating);
-  return fittest;
 }
 
 void output(){

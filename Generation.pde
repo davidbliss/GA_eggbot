@@ -29,13 +29,7 @@ class Generation {
     // sort by rating
     Arrays.sort(individuals);
   }
-  
-  Individual getFittest(){
-    // in case it has not already been called, go ahead and force evaluate
-    evaluate();
-    return individuals[individuals.length-1];
-  }
-  
+    
   void evolve(Generation parent) {
     int firstQuartile = (int)individuals.length/4;
     int secondQuartile = (int)individuals.length/2;
