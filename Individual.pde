@@ -43,7 +43,6 @@ class Individual implements Comparable {
     
     canvas.setPen(1);
     
-    int numParameters = parameters.length;
     int wavelength = (int)(parameters[1] * 1000);
     
     int magnatideModulationWavelength = (int)(parameters[3] * 1000);

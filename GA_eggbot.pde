@@ -20,13 +20,13 @@ EggbotCanvas [] individualCanvases = {};
 Individual [] lineage = {}; // an array of individuals 
 
 void setup() {
+  size(1001, 801);
   cp5 = new ControlP5(this);
   
   // set up one eggbot canvas to use for the actual plotting, pass it to each generation so it can be passed onto the individuals
   printCanvas = new EggbotCanvas(this, true);
   printCanvas.penUp(true);
   
-  size(windowWidth, windowHeight);
   
   generations = new Generation [1];
   
@@ -226,10 +226,10 @@ void back(){
 
 void controlEvent(ControlEvent theEvent){
   // Handle events from UI
-  String name = theEvent.controller().name();
+  String name = theEvent.controller().getName();
   
   if (name.indexOf("rating")>-1) {
-    generations[generations.length-1].rate(Integer.valueOf(name.substring(7, name.length())),theEvent.controller().value()); 
+    generations[generations.length-1].rate(Integer.valueOf(name.substring(7, name.length())),theEvent.controller().getValue()); 
   } else if (name.indexOf("print")>-1) { 
     if (displayMode ==0){
       // generation mode
@@ -242,7 +242,7 @@ void controlEvent(ControlEvent theEvent){
     lineage(Integer.valueOf(name.substring(8, name.length())));
   } else if (name.indexOf("scroll")>-1) { 
     // scroll value between 0 and 1 translat between 0 and -windowCanvasHeight+windowHeight
-    float m = map(theEvent.controller().value(), 100, 0, 0, -windowCanvasHeight+windowHeight);
+    float m = map(theEvent.controller().getValue(), 100, 0, 0, -windowCanvasHeight+windowHeight);
     vOffset = int(m);
   }
   
@@ -259,4 +259,3 @@ void output(){
   }
   println(output);
 }
-
