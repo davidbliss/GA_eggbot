@@ -226,10 +226,10 @@ void back(){
 
 void controlEvent(ControlEvent theEvent){
   // Handle events from UI
-  String name = theEvent.controller().getName();
+  String name = theEvent.getController().getName();
   
   if (name.indexOf("rating")>-1) {
-    generations[generations.length-1].rate(Integer.valueOf(name.substring(7, name.length())),theEvent.controller().getValue()); 
+    generations[generations.length-1].rate(Integer.valueOf(name.substring(7, name.length())),theEvent.getController().getValue()); 
   } else if (name.indexOf("print")>-1) { 
     if (displayMode ==0){
       // generation mode
@@ -242,7 +242,7 @@ void controlEvent(ControlEvent theEvent){
     lineage(Integer.valueOf(name.substring(8, name.length())));
   } else if (name.indexOf("scroll")>-1) { 
     // scroll value between 0 and 1 translat between 0 and -windowCanvasHeight+windowHeight
-    float m = map(theEvent.controller().getValue(), 100, 0, 0, -windowCanvasHeight+windowHeight);
+    float m = map(theEvent.getController().getValue(), 100, 0, 0, -windowCanvasHeight+windowHeight);
     vOffset = int(m);
   }
   
