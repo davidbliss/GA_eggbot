@@ -3,8 +3,8 @@ ControlP5 cp5;
 
 Generation [] generations; // an array of generations
 
-int numIndividuals = 4; // number must be even
-float mutationPropability = .2; // likely target should be 1% of the time
+int numIndividuals = 50; // number must be even, works best if this is a largish number (50)
+float mutationPropability = .1; // likely target should be 1% of the time
 float crossoverProbability = .75; // likely target should be 75% of the time
 float defaultRating = .4; // start as fairly rated so easier to only rate up ones you like and rate down ones you don't
 
