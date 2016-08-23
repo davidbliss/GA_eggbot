@@ -151,7 +151,7 @@ void mouseWheel(MouseEvent event) {
 void evolve(){
   // create a new generation 
   generations = (Generation[]) append (generations, new Generation(this, numIndividuals, mutationPropability, crossoverProbability, defaultRating, printCanvas, individualCanvases));
-  
+  generations[generations.length-2].evaluate();
   // evolve latest generation based on previous generation
   generations[generations.length-1].evolve(generations[generations.length-2]);
   
