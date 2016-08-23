@@ -11,7 +11,7 @@ class Generation {
   EggbotCanvas [] individualCanvases = {};
   PApplet parent;
   
-  Generation(PApplet p, int numIndividuals, float mp, float cp, EggbotCanvas pc, EggbotCanvas [] ic) {
+  Generation(PApplet p, int numIndividuals, float mp, float cp,  float dr, EggbotCanvas pc, EggbotCanvas [] ic) {
     parent = p;
     mutationProbability = mp;
     crossoverProbability = cp;
@@ -21,7 +21,7 @@ class Generation {
     // Build array of individuals based on parameters
     
     for (int i=0; i< numIndividuals; i++){
-      individuals = (Individual []) append(individuals, new Individual(i) );
+      individuals = (Individual []) append(individuals, new Individual(i, dr) );
     }
   }
   

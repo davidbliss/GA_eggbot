@@ -3,12 +3,15 @@
 
 class Individual implements Comparable {
   float[] parameters = {};
-  float rating;
+  float rating; 
+  float defatultRating;
   int id;
   int[] parents = {};
   
-  Individual(int pid) {
+  Individual(int pid, float dr) {
     id = pid;
+    defatultRating = dr;
+    rating = defaultRating;
     
     // Each individual should define its own parameters and decide what to do with them
     // parameter 0: magnatude of wave
@@ -72,7 +75,7 @@ class Individual implements Comparable {
   }
   
   Individual clone(){
-    Individual copy = new Individual(-1);
+    Individual copy = new Individual(-1, defaultRating);
     for (int i=0; i< parameters.length; i++){
       copy.parameters[i] = parameters[i];
     }

@@ -3,9 +3,10 @@ ControlP5 cp5;
 
 Generation [] generations; // an array of generations
 
-int numIndividuals = 50; // number must be even
-float mutationPropability = .04; // likely target should be 1% of the time
+int numIndividuals = 4; // number must be even
+float mutationPropability = .2; // likely target should be 1% of the time
 float crossoverProbability = .75; // likely target should be 75% of the time
+float defaultRating = .4; // start as fairly rated so easier to only rate up ones you like and rate down ones you don't
 
 int windowWidth = 1001;
 int windowHeight = 801;
@@ -67,6 +68,7 @@ void setup() {
      .setRange(0,1)
      .setNumberOfTickMarks(6)
      .setBroadcast(true)
+     .setValue(defaultRating)
      ;
      
      EggbotCanvas canvas = new EggbotCanvas(this, false);
@@ -77,7 +79,7 @@ void setup() {
   }
   
   // create initial generation
-  generations[0] = new Generation(this, numIndividuals, mutationPropability, crossoverProbability, printCanvas, individualCanvases);
+  generations[0] = new Generation(this, numIndividuals, mutationPropability, crossoverProbability, defaultRating, printCanvas, individualCanvases);
   
   // set UI to show generations
   generations();
@@ -148,7 +150,7 @@ void mouseWheel(MouseEvent event) {
 
 void evolve(){
   // create a new generation 
-  generations = (Generation[]) append (generations, new Generation(this, numIndividuals, mutationPropability, crossoverProbability, printCanvas, individualCanvases));
+  generations = (Generation[]) append (generations, new Generation(this, numIndividuals, mutationPropability, crossoverProbability, defaultRating, printCanvas, individualCanvases));
   
   // evolve latest generation based on previous generation
   generations[generations.length-1].evolve(generations[generations.length-2]);
@@ -156,7 +158,7 @@ void evolve(){
   //reset values in rating UI.
   for (int i = 0; i<numIndividuals; i++){
     cp5.get("rating " + i)
-      .setValue(0)
+      .setValue(defaultRating)
       ;
   }
 }
